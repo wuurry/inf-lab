@@ -219,6 +219,36 @@ def write_dict_to_txt(data, file, indent_level):
                     file.write(f"{indent}  - {item}\n")
         else:
             file.write(f"{indent}{key}: {value}\n")
+            
+def export_to_yaml(data, table_name):
+    """
+    Экспорт данных в формат YAML (упрощенная версия без datetime)
+    """
+    filename = os.path.join(OUTPUT_DIR, f"{table_name}.yaml")
+    
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            # Создаем структуру YAML с метаинформацией
+            yaml_structure = {
+                'table_name': table_name,
+                'total_records': len(data),
+                'records': data
+            }
+            
+            # Используем Dumper с русской кодировкой и красивым форматированием
+            yaml.dump(
+                yaml_structure,
+                f,
+                default_flow_style=False,
+                allow_unicode=True,
+                sort_keys=False,
+                indent=2
+            )
+        
+        print(f"  - {table_name}.yaml")
+        
+    except Exception as e:
+        print(f"Ошибка при экспорте в YAML: {e}")
 
 def get_available_tables():
     """Получить список всех таблиц в базе данных"""
